@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.company.project.dao.ProjectMapper">
+  <resultMap id="BaseResultMap" type="com.company.project.model.Project">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
+    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+    <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
+    <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="is_delete" jdbcType="BIT" property="isDelete" />
+    <result column="version" jdbcType="INTEGER" property="version" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="teacher_id" jdbcType="BIGINT" property="teacherId" />
+    <result column="name" jdbcType="LONGVARCHAR" property="name" />
+    <result column="technology" jdbcType="LONGVARCHAR" property="technology" />
+    <result column="introduction" jdbcType="LONGVARCHAR" property="introduction" />
+    <result column="front_number" jdbcType="LONGVARCHAR" property="frontNumber" />
+    <result column="max_number" jdbcType="LONGVARCHAR" property="maxNumber" />
+    <result column="determine_number" jdbcType="LONGVARCHAR" property="determineNumber" />
+  </resultMap>
+
+    <select id="list" resultType="com.company.project.model.Project">
+        select s.id as id,s.created_at as createdAt,s.created_by as createdBy,
+                s.updated_by as updatedBy,s.updated_at as updatedAt,s.status as status,
+                s.teacher_id as teacherId,s.name as name,s.technology as technology,
+                s.introduction as introduction,s.front_number as frontNumber,s.max_number as maxNumber,
+                s.determine_number as determineNumber,
+                u.user_name as teacherName
+        from t_project s
+        left join t_user u on s.teacher_id = u.id
+        where s.is_delete = 0
+    </select>
+
+</mapper>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.company.project.dao.StudentCourseMapper">
+  <resultMap id="BaseResultMap" type="com.company.project.model.StudentCourse">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+    <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
+    <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
+    <result column="is_delete" jdbcType="BIT" property="isDelete" />
+    <result column="version" jdbcType="INTEGER" property="version" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="course_id" jdbcType="BIGINT" property="courseId" />
+    <result column="grade" jdbcType="DECIMAL" property="grade" />
+    <result column="teacher_id" jdbcType="BIGINT" property="teacherId" />
+    <result column="project_id" jdbcType="BIGINT" property="projectId" />
+    <result column="overdue_time" jdbcType="TIMESTAMP" property="overdueTime" />
+  </resultMap>
+
+  <select id="list" resultType="com.company.project.model.StudentCourse">
+        select s.id as id,s.created_at as createdAt,s.created_by as createdBy,
+                s.updated_by as updatedBy,s.updated_at as updatedAt,s.status as status,
+                s.course_id as courseId,s.grade as grade,s.teacher_id as teacherId,
+                s.project_id as projectId,s.overdue_time as overdueTime,
+                tc.name as courseName,
+                tt.user_name as teacherName,
+                tu.user_name as studentName,
+                p.name as projectName
+        from t_student_course s
+        left join t_course tc on s.course_id = tc.id
+        left join t_user tt on s.teacher_id = tt.id
+        left join t_user tu on s.created_by = tu.id
+        left join t_project p on s.project_id = p.id
+        where s.is_delete = 0
+        <if test="createdBy != null and createdBy != ''">
+            and s.created_by = #{createdBy}
+        </if>
+        <if test="teacherId != null and teacherId != ''">
+            and s.teacher_id = #{teacherId}
+        </if>
+  </select>
+
+    <select id="getCountByProjectId" resultType="java.lang.Integer">
+        select count(1)
+        from t_student_course
+        where is_delete = 0
+        and project_id = #{projectId}
+        and status in (0,1)
+    </select>
+
+  <select id="getCount" resultType="java.lang.Integer">
+        select count(1)
+        from t_student_course
+        where is_delete = 0
+        and created_by = #{createdBy}
+        and project_id = #{projectId}
+    </select>
+
+</mapper>
